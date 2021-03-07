@@ -14,7 +14,6 @@ type PrometheusConfiguration struct {
 	Address           string                  // Address of the Prometheus Push Gateway
 	BasicAuthUser     string                  // Http Basic Auth User
 	BasicAuthPassword string                  // Http Basic Auth Password
-	Interval          uint32                  // Interval
 	Collectors        *[]prometheus.Collector // User defined Collectors
 	Gatherers         *[]prometheus.Gatherer  // User defined Gatherers
 }
