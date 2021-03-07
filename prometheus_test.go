@@ -1,0 +1,1 @@
+package gin_prometheus_pusher_test
