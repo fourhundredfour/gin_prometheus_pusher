@@ -30,6 +30,7 @@ func Prometheus(config PrometheusConfiguration) gin.HandlerFunc {
 		if err := pusher.Add(); err != nil {
 			log.Fatal(err)
 		}
+		c.Next()
 	}
 }
 
