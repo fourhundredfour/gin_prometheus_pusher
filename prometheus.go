@@ -1,6 +1,7 @@
 package gin_prometheus_pusher
 
 import (
+	"log"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,9 @@ func Prometheus(config PrometheusConfiguration) gin.HandlerFunc {
 		go attachCollectors(config.Collectors, pusher, wg)
 		go attachGatherers(config.Gatherers, pusher, wg)
 		wg.Wait()
-		pusher.Add()
+		if err := pusher.Add(); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
