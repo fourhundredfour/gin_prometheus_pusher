@@ -18,7 +18,7 @@ package main
 import (
     "net/http"
     "github.com/gin-gonic/gin"
-    ginprometheuspusher "github.com/fourhundredfour/gin_prometheus_pusher"
+    "github.com/fourhundredfour/gin_prometheus_pusher"
 )
 
 func main() {
