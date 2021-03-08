@@ -42,15 +42,19 @@ func configureBasicAuth(username string, password string, pusher *push.Pusher, w
 }
 
 func attachCollectors(collectors *[]prometheus.Collector, pusher *push.Pusher, wg *sync.WaitGroup) {
-	for _, collector := range *collectors {
-		pusher.Collector(collector)
+	if collectors != nil {
+		for _, collector := range *collectors {
+			pusher.Collector(collector)
+		}
 	}
 	wg.Done()
 }
 
 func attachGatherers(gatherers *[]prometheus.Gatherer, pusher *push.Pusher, wg *sync.WaitGroup) {
-	for _, gatherer := range *gatherers {
-		pusher.Gatherer(gatherer)
+	if gatherers != nil {
+		for _, gatherer := range *gatherers {
+			pusher.Gatherer(gatherer)
+		}
 	}
 	wg.Done()
 }
