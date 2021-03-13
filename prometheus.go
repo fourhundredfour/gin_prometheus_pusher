@@ -10,12 +10,14 @@ import (
 )
 
 type PrometheusConfiguration struct {
+	Collectors        *[]prometheus.Collector // User defined Collectors
+	Gatherers         *[]prometheus.Gatherer  // User defined Gatherers
 	Job               string                  // Job Name
 	Address           string                  // Address of the Prometheus Push Gateway
 	BasicAuthUser     string                  // Http Basic Auth User
 	BasicAuthPassword string                  // Http Basic Auth Password
-	Collectors        *[]prometheus.Collector // User defined Collectors
-	Gatherers         *[]prometheus.Gatherer  // User defined Gatherers
+	AfterRequest      bool                    // Push metrics before request
+	BeforeRequest     bool                    // Push metrics after request
 }
 
 func Prometheus(config PrometheusConfiguration) gin.HandlerFunc {
@@ -27,10 +29,13 @@ func Prometheus(config PrometheusConfiguration) gin.HandlerFunc {
 		go attachCollectors(config.Collectors, pusher, wg)
 		go attachGatherers(config.Gatherers, pusher, wg)
 		wg.Wait()
-		if err := pusher.Add(); err != nil {
-			log.Fatal(err)
+		if config.BeforeRequest {
+			go pushMetrics(pusher)
 		}
 		c.Next()
+		if config.AfterRequest {
+			go pushMetrics(pusher)
+		}
 	}
 }
 
@@ -57,4 +62,10 @@ func attachGatherers(gatherers *[]prometheus.Gatherer, pusher *push.Pusher, wg *
 		}
 	}
 	wg.Done()
+}
+
+func pushMetrics(pusher *push.Pusher) {
+	if err := pusher.Push(); err != nil {
+		log.Println(err)
+	}
 }
