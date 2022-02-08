@@ -1,1 +1,1 @@
-package gin_prometheus_pusher_test
+package gin_prometheus_pusher
