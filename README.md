@@ -23,11 +23,10 @@ import (
 
 func main() {
     engine := gin.Default()
-	
-    var configuration gin_prometheus_pusher.PrometheusConfiguration
-    configuration.Address = "http://example.org/metrics"
-    configuration.Job = "my_job"
-    engine.Use(gin_prometheus_pusher.Prometheus(configuration))
+    engine.Use(gin_prometheus_pusher.Prometheus(&gin_prometheus_pusher.PrometheusConfiguration{
+    	Address: "http://example.org/metrics",
+	Job: "my_job",
+    }))
 
     engine.GET("/", func(ctx *gin.Context) {
         context.JSON(http.StatusOK, nil)
